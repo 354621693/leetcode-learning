@@ -1,3 +1,5 @@
+package javaCode.src;
+
 import java.util.*;
 
 /**
@@ -5,7 +7,7 @@ import java.util.*;
  * @description https://leetcode-cn.com/problems/queens-that-can-attack-the-king/
  * @date 2020-06-12-15:08
  */
-public class code {
+public class Code {
     public static List<Integer> poke(Deque<Integer> deque) {
         List<Integer> res = new ArrayList<> ();
         while (!deque.isEmpty ()) {
