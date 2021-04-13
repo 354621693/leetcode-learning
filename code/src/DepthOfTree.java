@@ -1,3 +1,10 @@
+package code.src;
+
+import javaCode.src.TreeNode;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class DepthOfTree {
     int answer = 0;
 
@@ -74,20 +81,23 @@ public class DepthOfTree {
     public TreeNode buildTree(int[] inorder, int[] postorder) {
         if(inorder==null||inorder.length<1)
             return null;
-        return subNode(inorder,0,inorder.length,postorder,0,postorder.length);
+        return subNode(inorder,0,inorder.length-1,postorder,0,postorder.length-1);
     }
 
     public TreeNode subNode(int[] inorder, int inStart,int inEnd, int[] postorder,int postStart,int postEnd){
-        if(postStart>=postEnd){
+        if(postStart>postEnd){
             return null;
         }
-        int temp = postorder[postEnd-1];
+        int temp = postorder[postEnd];
         TreeNode tree = new TreeNode(temp);
+        if(postStart==postEnd){
+            return tree;
+        }
         int index = findIndex(inorder,temp);
         int leftLength = index-inStart;
-        int rightLength = inEnd-index-1;
-        tree.left = subNode(inorder,inStart,index,postorder,postStart,postStart+leftLength);
-        tree.right = subNode(inorder,index+1,inEnd,postorder,inEnd-1-rightLength,inEnd-1);
+        int rightLength = inEnd-index;
+        tree.left = subNode(inorder,inStart,index-1,postorder,postStart,postStart+leftLength-1);
+        tree.right = subNode(inorder,index+1,inEnd,postorder,postStart+leftLength,postEnd-1);
         return tree;
     }
 
@@ -101,11 +111,43 @@ public class DepthOfTree {
     }
 
 
+    /**
+     * 从前序与中序遍历序列构造二叉树
+     * https://leetcode-cn.com/leetbook/read/data-structure-binary-tree/xoei3r/
+     */
+    Map<Integer,Integer> map = new HashMap<>();
+    int pos;
+    int[] preorder;
+    public TreeNode buildTreePre(int[] preorder, int[] inorder) {
+        this.preorder = preorder;
+        for(int i = 0;i<inorder.length;i++){
+            map.put(inorder[i],i);
+        }
+        return subjob(0,inorder.length-1);
+    }
+
+    public TreeNode subjob(int start,int end){
+        if(start>end){
+            return null;
+        }
+        Integer root_val = preorder[pos++];
+        TreeNode node = new TreeNode(root_val);
+        int index = map.get(root_val);
+
+        node.left=subjob(start,index-1);
+        node.right =subjob(index+1,end);
+        return node;
+    }
+
+
+
     public static void main(String[] a){
         DepthOfTree d = new DepthOfTree();
         int[] inorder = {9,3,15,20,7};
         int[] postorder = {9,15,7,20,3};
-        TreeNode treeNode = d.buildTree(inorder, postorder);
+        int[] preorder = {3,9,20,15,7};
+//        TreeNode treeNode = d.buildTree(inorder, postorder);
+        TreeNode treeNode = d.buildTreePre(inorder, preorder);
         return;
     }
 
