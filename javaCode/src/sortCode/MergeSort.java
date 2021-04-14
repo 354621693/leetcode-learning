@@ -1,4 +1,4 @@
-package sortCode;
+package javaCode.src.sortCode;
 
 /**
  * @author Leemanshow
@@ -6,7 +6,10 @@ package sortCode;
  * @date 2020-06-29-19:06
  */
 
+import java.util.Arrays;
+
 /**
+ * https://www.cnblogs.com/chengxiao/p/6194356.html
  * 归并排序，是创建在归并操作上的一种有效的排序算法。算法是采用分治法（Divide and Conquer）的一个非常典型的应用，且各层分治递归可以同时进行。归并排序思路简单，速度仅次于快速排序，为稳定排序算法，一般用于对总体无序，但是各子项相对有序的数列。
  * 1. 基本思想
  * 归并排序是用分治思想，分治模式在每一层递归上有三个步骤：
@@ -27,9 +30,51 @@ package sortCode;
  */
 public class MergeSort {
 
-    public void mergeSort(int[] data){
-        
+
+    public static void main(String[] args) {
+        int[] arr = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+        sort(arr);
+        System.out.println(Arrays.toString(arr));
     }
 
-//    public void
+    private static void sort(int[] arr) {
+        int[] temp = new int[arr.length];
+        sort(arr, 0, arr.length - 1, temp);
+    }
+
+    private static void sort(int[] arr, int left, int right, int[] res) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            sort(arr, left, mid, res);
+            sort(arr, mid + 1, right, res);
+            merge(arr, left, mid, right, res);
+        }
+    }
+
+    private static void merge(int[] arr, int left, int mid, int right, int[] temp) {
+        int i = left;
+        int j = mid + 1;
+        //临时数组指针
+        int m = 0;
+        while (i <= mid && j <= right) {
+            if (arr[i] <= arr[j]) {
+                temp[m++] = arr[i++];
+            } else {
+                temp[m++] = arr[j++];
+            }
+        }
+
+        while (i <= mid) {
+            temp[m++] = arr[i++];
+        }
+        while (j <= right) {
+            temp[m++] = arr[j++];
+        }
+
+        m = 0;
+        while (left <= right) {
+            arr[left++] = temp[m++];
+        }
+
+    }
 }
