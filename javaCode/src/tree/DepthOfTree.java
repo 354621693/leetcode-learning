@@ -1,4 +1,4 @@
-package code.src;
+package tree;
 
 import javaCode.src.TreeNode;
 

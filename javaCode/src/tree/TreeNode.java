@@ -1,4 +1,4 @@
-package code.src;
+package tree;
 
 public class TreeNode {
       int val;

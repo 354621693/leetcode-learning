@@ -1,4 +1,4 @@
-package javaCode.src.MuThread;
+package MuThread;
 
 import java.util.concurrent.CountDownLatch;
 
