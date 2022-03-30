@@ -38,7 +38,7 @@ public class MuThreadTest {
     }
 
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         MuThreadTest muThreadTest = new MuThreadTest();
 //        muThreadTest.muThread();
         muThreadTest.useCountDownLatch();
@@ -67,7 +67,7 @@ public class MuThreadTest {
                 s += "Java";
             }
             cdl.countDown();//此方法是CountDownLatch的线程数-1
-            System.out.println("t Over" +cdl.getCount());
+            System.out.println("t Over" + cdl.getCount());
         });
         t.start();
     }

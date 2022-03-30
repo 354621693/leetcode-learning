@@ -1,4 +1,4 @@
-package javaCode.src;
+package 零散的;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,30 +14,30 @@ public class CreateTxt {
     public static void main(String[] args) {
         int begin = 1000000;
         String prefix = "1380";
-        String linekey = System.getProperty ("line.separator");
-        StringBuilder sb = new StringBuilder ();
-        sb.append (prefix);
-        File file = new File ("E:/number.txt");
+        String linekey = System.getProperty("line.separator");
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix);
+        File file = new File("E:/number.txt");
         try {
-            RandomAccessFile randomFile = new RandomAccessFile ("E:/number.txt", "rw");
+            RandomAccessFile randomFile = new RandomAccessFile("E:/number.txt", "rw");
 //            if (!file.exists ()) {
 //                boolean newFile = file.createNewFile ();
 //            }
-            FileWriter fileWritter = new FileWriter (file.getName (), true);
+            FileWriter fileWritter = new FileWriter(file.getName(), true);
             for (int i = begin; i < begin + 1000000; i++) {
-                sb.append (i);
-                randomFile.writeChars (sb.toString ());
-                randomFile.writeChars (linekey);
+                sb.append(i);
+                randomFile.writeChars(sb.toString());
+                randomFile.writeChars(linekey);
 //                fileWritter.write (sb.toString ());
 //                fileWritter.write (linekey);
-                sb.delete (4, 11);
+                sb.delete(4, 11);
             }
-            randomFile.close ();
+            randomFile.close();
 //            fileWritter.close ();
-            System.out.println ("Done");
+            System.out.println("Done");
 
         } catch (IOException e) {
-            e.printStackTrace ();
+            e.printStackTrace();
         }
     }
 

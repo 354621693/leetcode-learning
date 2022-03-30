@@ -1,4 +1,4 @@
-package javaCode.src;
+package tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,26 +16,26 @@ public class TreeNodeCode {
         }
 
         List<Integer> temp;
-        if (res.size () <= level) {
-            temp = new ArrayList<Integer> ();
-            res.add (temp);
+        if (res.size() <= level) {
+            temp = new ArrayList<Integer>();
+            res.add(temp);
         } else {
-            temp = res.get (level);
+            temp = res.get(level);
         }
-        temp.add (root.val);
-        get (res, root.left, ++level);
-        get (res, root.right, level);
+        temp.add(root.val);
+        get(res, root.left, ++level);
+        get(res, root.right, level);
     }
 
     public static void main(String[] args) {
-        TreeNodeCode d = new TreeNodeCode ();
-        TreeNode a = new TreeNode (1);
-        d.levelOrder (a);
+        TreeNodeCode d = new TreeNodeCode();
+        TreeNode a = new TreeNode(1);
+        d.levelOrder(a);
     }
 
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> res = new ArrayList<> ();
-        get (res, root, 0);
+        List<List<Integer>> res = new ArrayList<>();
+        get(res, root, 0);
         return res;
     }
 

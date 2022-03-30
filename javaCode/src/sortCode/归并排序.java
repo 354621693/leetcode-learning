@@ -1,14 +1,11 @@
-package javaCode.src.sortCode;
+package sortCode;
+
+import java.util.Arrays;
 
 /**
  * @author Leemanshow
  * @description ${DESCRIPTION}
  * @date 2020-06-29-19:06
- */
-
-import java.util.Arrays;
-
-/**
  * https://www.cnblogs.com/chengxiao/p/6194356.html
  * 归并排序，是创建在归并操作上的一种有效的排序算法。算法是采用分治法（Divide and Conquer）的一个非常典型的应用，且各层分治递归可以同时进行。归并排序思路简单，速度仅次于快速排序，为稳定排序算法，一般用于对总体无序，但是各子项相对有序的数列。
  * 1. 基本思想
@@ -28,7 +25,7 @@ import java.util.Arrays;
  * ② 将上述序列再次归并，形成floor(n/4)个序列，每个序列包含四个元素
  * ③ 重复步骤②，直到所有元素排序完毕
  */
-public class MergeSort {
+public class 归并排序 {
 
 
     public static void main(String[] args) {

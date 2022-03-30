@@ -1,4 +1,4 @@
-package javaCode.src;
+package 零散的;
 
 import java.util.*;
 
@@ -9,47 +9,47 @@ import java.util.*;
  */
 public class Code {
     public static List<Integer> poke(Deque<Integer> deque) {
-        List<Integer> res = new ArrayList<> ();
-        while (!deque.isEmpty ()) {
-            Integer first = deque.pollFirst ();
-            res.add (first);
-            Integer second = deque.pollFirst ();
+        List<Integer> res = new ArrayList<>();
+        while (!deque.isEmpty()) {
+            Integer first = deque.pollFirst();
+            res.add(first);
+            Integer second = deque.pollFirst();
             if (second != null)
-                deque.addLast (second);
+                deque.addLast(second);
         }
         return res;
     }
 
     public static List<Integer> repoke(List<Integer> list) {
-        Deque<Integer> deque = new ArrayDeque<> ();
-        List<Integer> res = new ArrayList<> ();
-        int size = list.size ();
+        Deque<Integer> deque = new ArrayDeque<>();
+        List<Integer> res = new ArrayList<>();
+        int size = list.size();
         int i = size - 1;
         while (i >= 0) {
-            deque.addFirst (list.get (i));
+            deque.addFirst(list.get(i));
             if (i - 1 < 0)
                 break;
-            deque.addFirst (deque.pollLast ());
+            deque.addFirst(deque.pollLast());
 //            deque.addFirst (list.get (i - 2));
 //            Integer first = deque.getFirst ();
             i -= 1;
         }
-        while (!deque.isEmpty ()) {
-            res.add (deque.pollFirst ());
+        while (!deque.isEmpty()) {
+            res.add(deque.pollFirst());
         }
         return res;
     }
 
     public static void main(String[] args) {
-        Deque<Integer> deque = new ArrayDeque<> ();
-        deque.addLast (1);
-        deque.addLast (2);
-        deque.addLast (3);
-        deque.addLast (4);
-        deque.addLast (5);
-        List<Integer> poke = poke (deque);
-        List<Integer> repoke = repoke (poke);
-        titleToNumber ("ZY");
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(1);
+        deque.addLast(2);
+        deque.addLast(3);
+        deque.addLast(4);
+        deque.addLast(5);
+        List<Integer> poke = poke(deque);
+        List<Integer> repoke = repoke(poke);
+        titleToNumber("ZY");
         return;
     }
 
@@ -72,10 +72,10 @@ public class Code {
      */
     public static int titleToNumber(String s) {
         int res = 0;
-        for (int i = 0; i < s.length (); i++) {
-            res = res + (int) ((s.charAt (i) - 64) * Math.pow (26, s.length () - i - 1));
+        for (int i = 0; i < s.length(); i++) {
+            res = res + (int) ((s.charAt(i) - 64) * Math.pow(26, s.length() - i - 1));
         }
-        System.out.println (res);
+        System.out.println(res);
         return res;
     }
 
@@ -87,7 +87,7 @@ public class Code {
      * @return
      */
     public List<List<Integer>> queensAttacktheKing(int[][] queens, int[] king) {
-        List<List<Integer>> res = new ArrayList<> ();
+        List<List<Integer>> res = new ArrayList<>();
         boolean[][] flag = new boolean[8][8];
         for (int[] queen : queens) {
             flag[queen[0]][queen[1]] = true;
@@ -96,7 +96,7 @@ public class Code {
         for (int[] aDirection : direction) {
             for (int x = king[0], y = king[1]; x >= 0 && x < 8 && y >= 0 && y < 8; x = x + aDirection[0], y = y + aDirection[1]) {
                 if (flag[x][y]) {
-                    res.add (Arrays.asList (x, y));
+                    res.add(Arrays.asList(x, y));
                     break;
                 }
             }
@@ -122,11 +122,11 @@ public class Code {
      * @return
      */
     public int removeDuplicates(int[] nums) {
-        Set<Integer> set = new HashSet<> ();
+        Set<Integer> set = new HashSet<>();
         int j = 0;
         for (int i = 0; i < nums.length; i++) {
-            if (!set.contains (nums[i])) {
-                set.add (nums[i]);
+            if (!set.contains(nums[i])) {
+                set.add(nums[i]);
                 nums[j] = nums[i];
                 j++;
             }
@@ -134,9 +134,6 @@ public class Code {
         return j;
 
     }
-
-
-
 
 
 }
