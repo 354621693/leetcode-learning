@@ -1,4 +1,4 @@
-package ershiyi02;
+package 二十一天刷题20220405.day2前缀和数组;
 
 /**
  * @author leewencan
