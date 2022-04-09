@@ -69,6 +69,9 @@ public class 快速排序 {
             System.out.print(i);
             System.out.print(",");
         }
+        int[] nn = {2, 45, 9, 6, 9, 3, 5, 2, 4, 2, 6};
+        bucketSort(nn);
+        System.out.println(nn);
     }
 
 
@@ -287,4 +290,6 @@ public class 快速排序 {
         }
         return max;
     }
+
+
 }

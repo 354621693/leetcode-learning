@@ -1,5 +1,9 @@
 package 二十一天刷题20220405.day4二维数组的花式遍历技巧;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
  *
@@ -34,11 +38,12 @@ package 二十一天刷题20220405.day4二维数组的花式遍历技巧;
 public class 旋转图像 {
     //先对角镜像，再逐行反转
     public void rotate(int[][] matrix) {
+        LinkedList<Integer> a = new LinkedList<>();
+        a.toArray(new Integer[10]);
         duijioamirro(matrix);
         for (int i = 0; i < matrix.length; i++) {
             revese(matrix[i]);
         }
-
     }
 
     public void duijioamirro(int[][] matrix) {
