@@ -60,13 +60,14 @@ public class 区域和检索前缀和二维数组版304 {
         System.out.println(numMatrix.sumRegion(2, 1, 4, 3));
         System.out.println(numMatrix.sumRegion(1, 1, 2, 2));
         System.out.println(numMatrix.sumRegion(1, 2, 2, 4));
-        NumMatrix aa = new NumMatrix(matrix);
-        System.out.println(numMatrix.sumRegion(1, 2, 2, 4));
+        NumMatrix aa = new NumMatrix(new int[][]{{-4,-5}});
+        System.out.println(aa.sumRegion(1, 2, 2, 4));
     }
 
 
     /**
-     *
+     *二维版的前缀和，每一行的前缀和都是从左到右的，每一列的前缀和都是从上到下的
+     * pre用于存贮前缀和，pre[i+1][j+1]存贮的是matrix[i][j]到matrix[0][0]的总和
      */
      static class NumMatrix {
         int[][] pre;
