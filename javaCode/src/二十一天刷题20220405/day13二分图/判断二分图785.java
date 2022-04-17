@@ -1,4 +1,4 @@
-package 二十一天刷题20220405.day13;
+package 二十一天刷题20220405.day13二分图;
 
 /**
  * https://leetcode-cn.com/problems/is-graph-bipartite/solution/shen-by-leemanshow-gry8/
