@@ -1,4 +1,4 @@
-package 二十一天刷题20220405.day9LRU;
+package 二十一天刷题20220405.day9LRU和LFU;
 
 import java.util.HashMap;
 
