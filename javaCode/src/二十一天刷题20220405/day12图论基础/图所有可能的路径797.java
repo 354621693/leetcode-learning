@@ -13,6 +13,13 @@ public class 图所有可能的路径797 {
         traverse(graph,0,path);
         return res;
     }
+
+    /**
+     * 深度优先（DFS）递归遍历方法
+     * @param graph 邻接表
+     * @param vertex 即将被遍历的节点
+     * @param path 当前在走的路径
+     */
     public void traverse(int[][] graph,int vertex, LinkedList<Integer> path){
         path.add(vertex);
         int n = graph.length;
