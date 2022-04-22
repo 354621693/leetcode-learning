@@ -22,8 +22,11 @@ public class 桶视角的划分k个相等子集合698 {
             return false;
         }
         // visited = new boolean[nums.length];
-        int used = 0; // 使用位图技巧,存储数组中元素的使用情况，int有32位。
+         // 使用位图技巧,存储数组中元素的使用情况，int有32位。
         // 从低位开始0为未使用1为已使用，如要查询第i位：used>>i&1==1?true:fals（并）；要设置第i位为1：used = used|1<<i (因为i是从低位开始，所以要左移)；要设置第i位为0：used = used^1<<i（异或）
+        int used = 0;
+
+        //每个桶中元素的综合肯定等于总数/桶数
         target = sum / k;
         return traverse(k, 0, nums, 0, used);
     }
@@ -52,17 +55,23 @@ public class 桶视角的划分k个相等子集合698 {
             return map.get(used);
         }
 
+        //做选择，选择一个数放入桶中
         for (int i = numsIndex; i < nums.length; i++) {
+            // nums[i] 已经被装入别的桶中 或者 当前桶装不下 nums[i]
             if (((used >> i) & 1) != 1 && bucketSum + nums[i] <= target) {
+                // 做选择，将 nums[i] 装入当前桶中
                 bucketSum += nums[i];
                 used = used | 1 << i;
+                //如果这个数字放进桶之后，后续成功了，直接返回成功
                 if (traverse(index, bucketSum, nums, i + 1, used)) {
                     return true;
                 }
+                //如果失败了，撤回选择，选下一个数字
                 bucketSum -= nums[i];
                 used = used ^ 1 << i;
             }
         }
+        // 穷举了所有数字，都无法装满当前桶
         return false;
     }
 }
