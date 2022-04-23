@@ -1,7 +1,6 @@
-package 二十一天刷题20220405.day19;
+package 二十一天刷题20220405.day19LIS最长递增子序列;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class 俄罗斯套娃信封问题354 {
     public int maxEnvelopes(int[][] envelopes) {

@@ -1,4 +1,4 @@
-package 二十一天刷题20220405.day19;
+package 二十一天刷题20220405.day19LIS最长递增子序列;
 
 import java.util.Arrays;
 
@@ -31,6 +31,9 @@ public class LIS最长递增子序列300 {
     int[] dp;
     int res = 0;
 
+    /**
+     *  复杂度 O(N^2)
+     */
     public int lengthOfLIS(int[] nums) {
         dp = new int[nums.length];
         //注意
