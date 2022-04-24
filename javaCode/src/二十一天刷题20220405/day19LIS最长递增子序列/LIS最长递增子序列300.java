@@ -32,7 +32,7 @@ public class LIS最长递增子序列300 {
     int res = 0;
 
     /**
-     *  复杂度 O(N^2)
+     * 复杂度 O(N^2)
      */
     public int lengthOfLIS(int[] nums) {
         dp = new int[nums.length];
@@ -49,6 +49,42 @@ public class LIS最长递增子序列300 {
             res = Math.max(res, j);
         }
         return res;
+    }
+
+    /**
+     * 使用二分查找的LIS算法，时间复杂度为O(N*logN)
+     * 状态转移：定义：tail[i] 表示：长度为 i + 1 的 所有 上升子序列的结尾的最小值，用于求解 LIS 问题的状态数组。
+     * 数组 tail 是一个严格上升数组，即有序，因此在算法中可以对tail数组使用二分查找
+     * base case：开始遍历nums数组时，tail[0] = nums[0]
+     */
+    public int lengthOfLISUseBS(int[] nums) {
+        int tail[] = new int[nums.length];
+        tail[0] = nums[0];
+        //用于表示tail数组的最后一位的位置
+        int end = 0;
+        for (int i = 1; i < nums.length; i++) {
+            //这里不能是>=，因为题目要求严格递增的子序列
+            if (nums[i] > tail[end]) {
+                tail[++end] = nums[i];
+            } else {
+                //使用二分查找，找出第一个比nums[i] 大的数，替换
+                int target = nums[i];
+                //区间[low,high)
+                int low = 0, high = end;
+                while (low < high) {
+                    int mid = low + (high - low) / 2;
+                    if (tail[mid] < target) {
+                        low = mid + 1;
+                    } else {
+                        high = mid;
+                    }
+                }
+                tail[low] = nums[i];
+            }
+        }
+        // 此时 end 是有序数组 tail 最后一个元素的索引
+        // 题目要求返回的是长度，因此 +1 后返回
+        return ++end;
     }
 
 }

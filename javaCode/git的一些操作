@@ -1,8 +1,8 @@
 使用 HTTP 或 HTTPS 协议连接到 Git 仓库的代理方法#
 2.1 针对所有域名的 Git 仓库#
 # HTTP/HTTPS 协议，port 需与代理软件设置的一致
-git config –-global http.proxy http://127.0.0.1:port
-git config –-global http.proxy http://127.0.0.1:8889
+git config --global http.proxy http://127.0.0.1:port
+git config --global http.proxy http://127.0.0.1:7890
 
 # SOCKS5 协议
 git config --global http.proxy socks5://127.0.0.1:port
