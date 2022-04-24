@@ -1,4 +1,4 @@
-package 二十一天刷题20220405.day19LIS最长递增子序列;
+package 二十一天刷题20220405.day19_0最长递增子序列LIS;
 
 import java.util.Arrays;
 
@@ -58,7 +58,7 @@ public class LIS最长递增子序列300 {
      * base case：开始遍历nums数组时，tail[0] = nums[0]
      */
     public int lengthOfLISUseBS(int[] nums) {
-        int tail[] = new int[nums.length];
+        int[] tail = new int[nums.length];
         tail[0] = nums[0];
         //用于表示tail数组的最后一位的位置
         int end = 0;
