@@ -74,7 +74,7 @@ public class 交替打印FooBar1115 {
         Foobar1 foobar1 = new Foobar1(10);
         executorService.submit(new Thread(()->{
             try {
-                foobar1.foo(new Thread(()->System.out.println("foo")));
+                foobar1.foo(new Thread(()->System.out.print("foo")));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
