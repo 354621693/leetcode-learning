@@ -1,6 +1,8 @@
 package MuThread;
 
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * https://leetcode.cn/problems/print-foobar-alternately/description/
@@ -147,6 +149,48 @@ public class 交替打印FooBar1115 {
         }
     }
 
+    /**
+     * 使用可重入锁自旋
+     */
+    static class Foobar_ReentrantLock extends 交替打印FooBar1115 {
+        Lock lock = new ReentrantLock();
+         boolean execFoo = true;
+
+        public Foobar_ReentrantLock(int n) {
+            super(n);
+        }
+
+        public void foo(Runnable printFoo) throws InterruptedException {
+            for (int i = 0; i < n; ) {
+                try {
+                    lock.lock();
+                    if (execFoo) {
+                        printFoo.run();
+                        execFoo = false;
+                        i++;
+                    }
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+
+        public void bar(Runnable printBar) throws InterruptedException {
+            for (int i = 0; i < n; ) {
+                try {
+                    lock.lock();
+                    if (!execFoo) {
+                        printBar.run();
+                        execFoo = true;
+                        i++;
+                    }
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+    }
+
     public static void main(String a[]) {
         Runnable printFoo = () -> {
             System.out.print("foo");
@@ -155,10 +199,7 @@ public class 交替打印FooBar1115 {
             System.out.print("bar");
         };
         ExecutorService executorService = Executors.newCachedThreadPool();
-//        交替打印FooBar1115 交替打印FooBar1115 = new Foobar_Semaphore(10);
-        交替打印FooBar1115 交替打印FooBar1115 = new Foobar2_CyclicBarrier(10);
-        FooBar_Yield fooBar_Yield = new FooBar_Yield(10);
-        交替打印FooBar1115 theTask = fooBar_Yield;
+        交替打印FooBar1115 theTask =  new Foobar_ReentrantLock(50);
         executorService.submit(new Thread(() -> {
             try {
                 theTask.foo(new Thread(() -> System.out.print("foo")));
