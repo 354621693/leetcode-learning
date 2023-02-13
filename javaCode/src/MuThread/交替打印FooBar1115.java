@@ -70,7 +70,7 @@ public class 交替打印FooBar1115 {
     /**
      * 循环栅栏，适合协调多个线程同步执行操作的场景，所有线程等待完成后一起做某件事情
      */
-    public static class Foobar2_CyclicBarrier extends 交替打印FooBar1115{
+    public static class Foobar2_CyclicBarrier extends 交替打印FooBar1115 {
         private CyclicBarrier cyclicBarrier = new CyclicBarrier(2);//表示有两个线程参与等待
         //因为要控制先后，所以要用一个标志位表示foo先打印
         volatile boolean fooExec = true;
@@ -108,6 +108,44 @@ public class 交替打印FooBar1115 {
         }
     }
 
+    /**
+     * 使用yield实现自旋+让出cpu；
+     */
+    static class FooBar_Yield extends 交替打印FooBar1115 {
+        volatile boolean permitFoo = true;
+
+        public FooBar_Yield(int n) {
+            super(n);
+        }
+
+        public void foo(Runnable printFoo) throws InterruptedException {
+            int count = 0;
+            for (int i = 0; i < n; ) {
+                if (permitFoo) {
+                    printFoo.run();
+                    permitFoo = false;
+                    i++;
+                } else {
+                    System.err.println("自旋foo" + (count++));
+                    Thread.yield();
+                }
+            }
+        }
+
+        public void bar(Runnable printBar) throws InterruptedException {
+            int count = 0;
+            for (int i = 0; i < n; ) {
+                if (!permitFoo) {
+                    printBar.run();
+                    permitFoo = true;
+                    i++;
+                } else {
+                    System.err.println("自旋bar" + (count++));
+                    Thread.yield();
+                }
+            }
+        }
+    }
 
     public static void main(String a[]) {
         Runnable printFoo = () -> {
@@ -119,16 +157,18 @@ public class 交替打印FooBar1115 {
         ExecutorService executorService = Executors.newCachedThreadPool();
 //        交替打印FooBar1115 交替打印FooBar1115 = new Foobar_Semaphore(10);
         交替打印FooBar1115 交替打印FooBar1115 = new Foobar2_CyclicBarrier(10);
+        FooBar_Yield fooBar_Yield = new FooBar_Yield(10);
+        交替打印FooBar1115 theTask = fooBar_Yield;
         executorService.submit(new Thread(() -> {
             try {
-                交替打印FooBar1115.foo(new Thread(() -> System.out.print("foo")));
+                theTask.foo(new Thread(() -> System.out.print("foo")));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }));
         executorService.submit(new Thread(() -> {
             try {
-                交替打印FooBar1115.bar(new Thread(() -> System.out.println("bar")));
+                theTask.bar(new Thread(() -> System.out.println("bar")));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
