@@ -1,6 +1,7 @@
 package MuThread;
 
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -150,11 +151,11 @@ public class 交替打印FooBar1115 {
     }
 
     /**
-     * 使用可重入锁自旋
+     * 使用reentrnatLock可重入锁自旋
      */
     static class Foobar_ReentrantLock extends 交替打印FooBar1115 {
         Lock lock = new ReentrantLock();
-         boolean execFoo = true;
+        boolean execFoo = true;
 
         public Foobar_ReentrantLock(int n) {
             super(n);
@@ -191,6 +192,96 @@ public class 交替打印FooBar1115 {
         }
     }
 
+    /**
+     * 使用reentrnatLock可重入锁自旋，并使用Condition解决空转竞争锁的情况
+     */
+    static class Foobar_ReentrantLock_Condition extends 交替打印FooBar1115 {
+        Lock lock = new ReentrantLock(true);
+        private final Condition foo = lock.newCondition();
+        boolean execFoo = true;
+
+
+        public Foobar_ReentrantLock_Condition(int n) {
+            super(n);
+        }
+
+        public void foo(Runnable printFoo) throws InterruptedException {
+            for (int i = 0; i < n; i++) {
+                lock.lock();
+                try {
+                    if (execFoo) {
+                        printFoo.run();
+                        execFoo = false;
+                        Thread.sleep(200);
+                        foo.signal();
+                    } else {
+                        foo.await();
+                    }
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+
+        public void bar(Runnable printBar) throws InterruptedException {
+            for (int i = 0; i < n; i++) {
+                lock.lock();
+                try {
+                    if (!execFoo) {
+                        printBar.run();
+                        execFoo = true;
+                        foo.signal();
+                    } else {
+                        foo.await();
+                    }
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+    }
+
+    /**
+     * 使用synchronized代码块
+     */
+    static class Foobar_Synchronized extends 交替打印FooBar1115 {
+        volatile boolean printFooFlag = true;
+        private final Object lock = new Object();
+
+        public Foobar_Synchronized(int n) {
+            super(n);
+        }
+
+        public void foo(Runnable printFoo) throws InterruptedException {
+            for (int i = 0; i < n; i++) {
+                synchronized (lock) {
+                    if (printFooFlag) {
+                        printFoo.run();
+                        printFooFlag = false;
+                        lock.notify();
+                    } else {
+                        lock.wait();
+                    }
+                }
+            }
+        }
+
+        public void bar(Runnable printBar) throws InterruptedException {
+            for (int i = 0; i < n; i++) {
+                synchronized (lock) {
+                    if (printFooFlag) {
+                        lock.wait();
+                    } else {
+                        printBar.run();
+                        printFooFlag = true;
+                        lock.notify();
+                    }
+                }
+            }
+        }
+    }
+
+
     public static void main(String a[]) {
         Runnable printFoo = () -> {
             System.out.print("foo");
@@ -199,7 +290,7 @@ public class 交替打印FooBar1115 {
             System.out.print("bar");
         };
         ExecutorService executorService = Executors.newCachedThreadPool();
-        交替打印FooBar1115 theTask =  new Foobar_ReentrantLock(50);
+        交替打印FooBar1115 theTask = new Foobar_Synchronized(50);
         executorService.submit(new Thread(() -> {
             try {
                 theTask.foo(new Thread(() -> System.out.print("foo")));
