@@ -1,8 +1,11 @@
 package MuThread;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -245,6 +248,7 @@ public class 交替打印FooBar1115 {
      * 使用synchronized代码块
      */
     static class Foobar_Synchronized extends 交替打印FooBar1115 {
+
         volatile boolean printFooFlag = true;
         private final Object lock = new Object();
 
@@ -258,10 +262,9 @@ public class 交替打印FooBar1115 {
                     if (printFooFlag) {
                         printFoo.run();
                         printFooFlag = false;
-                        lock.notify();
-                    } else {
-                        lock.wait();
+                        lock.notifyAll();
                     }
+                    lock.wait();
                 }
             }
         }
@@ -271,16 +274,61 @@ public class 交替打印FooBar1115 {
                 synchronized (lock) {
                     if (printFooFlag) {
                         lock.wait();
-                    } else {
-                        printBar.run();
-                        printFooFlag = true;
-                        lock.notify();
                     }
+                    printBar.run();
+                    printFooFlag = true;
+                    lock.notifyAll();
                 }
             }
         }
     }
 
+    /**
+     * LockSupport类的核心方法其实就两个：park()和unpark()，其中park()方法用来阻塞当前调用线程，unpark()方法用于唤醒指定线程。
+     * 这其实和Object类的wait()和signal()方法有些类似，但是LockSupport的这两种方法从语意上讲比Object类的方法更清晰，而且可以针对指定线程进行阻塞和唤醒。
+     * LockSupport类使用了一种名为Permit（许可）的概念来做到阻塞和唤醒线程的功能，可以把许可看成是一种(0,1)信号量（Semaphore），但与 Semaphore 不同的是，许可的累加上限是1。
+     * 初始时，permit为0，当调用unpark()方法时，线程的permit加1，当调用park()方法时，如果permit为0，则调用线程进入阻塞状态。
+     *
+     * 作者：a-fei-8
+     * 链接：https://leetcode.cn/problems/print-foobar-alternately/solution/chang-you-duo-xian-cheng-zhi-1115-by-a-f-mf5u/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     */
+    static class Foobar_LockSupport extends 交替打印FooBar1115{
+
+        public Foobar_LockSupport(int n) {
+            super(n);
+        }
+
+        private volatile boolean printFooFlag = true;
+
+        private Map<String,Thread> map = new ConcurrentHashMap<>(3);
+
+        // 使用looksupport来实现
+        public void foo(Runnable printFoo) throws InterruptedException {
+            map.put("foo",Thread.currentThread());
+            for (int i = 0; i < n; i++) {
+                while (!printFooFlag) {
+                    LockSupport.park();
+                }
+                printFoo.run();
+                printFooFlag = false;
+                LockSupport.unpark(map.get("bar"));
+            }
+        }
+
+        public void bar(Runnable printBar) throws InterruptedException {
+            map.put("bar",Thread.currentThread());
+            for (int i = 0; i < n; i++) {
+                while(printFooFlag){
+                    LockSupport.park();
+                }
+                printBar.run();
+                printFooFlag = true;
+                LockSupport.unpark(map.get("foo"));
+            }
+        }
+    }
 
     public static void main(String a[]) {
         Runnable printFoo = () -> {
@@ -290,7 +338,7 @@ public class 交替打印FooBar1115 {
             System.out.print("bar");
         };
         ExecutorService executorService = Executors.newCachedThreadPool();
-        交替打印FooBar1115 theTask = new Foobar_Synchronized(50);
+        交替打印FooBar1115 theTask = new Foobar_LockSupport(50);
         executorService.submit(new Thread(() -> {
             try {
                 theTask.foo(new Thread(() -> System.out.print("foo")));
@@ -307,4 +355,5 @@ public class 交替打印FooBar1115 {
         }));
         executorService.shutdown();
     }
+
 }
