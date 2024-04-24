@@ -28,6 +28,7 @@ public class 接雨水42 {
 
     /**
      * 暴力解法
+     *
      * @param height
      * @return
      */
@@ -38,11 +39,11 @@ public class 接雨水42 {
         int ans = 0;
         for (int i = 0; i < height.length; i++) {
             int leftMax = 0;
-            for (int j = i - 1; j > 0; j--) {
+            for (int j = i; j >= 0; j--) {
                 leftMax = Math.max(leftMax, height[j]);
             }
             int rightMax = 0;
-            for (int j = i + 1; j < height.length; j++) {
+            for (int j = i; j < height.length; j++) {
                 rightMax = Math.max(rightMax, height[j]);
             }
 
