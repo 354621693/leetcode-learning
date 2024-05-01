@@ -7,6 +7,9 @@ import java.util.*;
  * 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
  * <p>
  * 求在该柱状图中，能够勾勒出来的矩形的最大面积。
+ *
+ * 题解
+ * https://leetcode.cn/problems/largest-rectangle-in-histogram/solutions/2763060/bao-li-jie-fa-dan-diao-zhan-shao-bing-yo-o522/
  */
 public class 柱状图中最大的矩形_82 {
     /**
@@ -64,6 +67,7 @@ public class 柱状图中最大的矩形_82 {
             }
             stack.push(i);
         }
+        // 处理剩下还在栈中的元素
         while (!stack.isEmpty()) {
             //遍历到最后都还没出栈的元素，右边肯定是最后一个元素了（或边界元素本身）
             int right = heights.length;
@@ -79,7 +83,6 @@ public class 柱状图中最大的矩形_82 {
 
     /**
      * 哨兵优化（在数组左右各加上高度为0的元素，可以避免考虑边界情况
-     *
      * @param heights
      * @return
      */
@@ -95,16 +98,13 @@ public class 柱状图中最大的矩形_82 {
         int ans = 0;
         for (int i = 0; i < len; i++) {
             while (!stack.isEmpty() && newHeights[stack.peek()] > newHeights[i]) {
-
                 Integer pop = stack.pop();
                 int width;
                 // 因为数组的末尾一定是0，那么前面的非0高度一定都会出栈
                 ans = Math.max(ans, newHeights[pop] * (i - stack.peek() - 1));
-
             }
             stack.push(i);
         }
-
         return ans;
     }
 
